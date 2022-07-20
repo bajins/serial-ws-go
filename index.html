@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>获取串口数据</title>
+</head>
+<body>
+<h2 id="h2">Hello World</h2>
+<button type="button" id="test">测试</button>
+<script type="text/javascript">
+    const ws = new WebSocket("ws://127.0.0.1:8080/ws");
+    console.log("Attempting Connection...");
+
+    ws.onopen = () => {
+        console.log("Successfully Connected");
+        ws.send("Hi From the Client!")
+    };
+
+    /**
+     *
+     * @param event MessageEvent
+     * <ul>
+     *     <li>data</li>
+     *     <li>lastEventId</li>
+     *     <li>origin</li>
+     *     <li>ports</li>
+     *     <li>source</li>
+     * </ul>
+     */
+    ws.onmessage = function (event) {
+        console.log(event)
+        document.getElementById("h2").innerText = event.data;
+        /*const msg = JSON.parse(event.data);
+        let sender, user_name, name_list, change_type;
+        switch (msg.type) {
+            case 'system':
+                sender = '系统消息: ';
+                break;
+            case 'user':
+                sender = msg.from + ': ';
+                break;
+            case 'handshake':
+                var user_info = {'type': 'login', 'content': uname};
+                sendMsg(user_info);
+                return;
+            case 'login':
+            case 'logout':
+                user_name = msg.content;
+                name_list = msg.user_list;
+                change_type = msg.type;
+                dealUser(user_name, change_type, name_list);
+                return;
+        }*/
+    };
+
+    ws.onclose = event => {
+        console.log("Socket Closed Connection: ", event);
+    };
+
+    ws.onerror = error => {
+        console.log("Socket Error: ", error);
+    };
+
+    document.getElementById("test").addEventListener("click", function () {
+        ws.send("test!");
+    });
+
+</script>
+</body>
+</html>
