@@ -4,13 +4,13 @@ import (
 	"embed"
 	"fmt"
 	"io/fs"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
 )
 
 // 内嵌资源目录指令
+//
 //go:embed *.conf
 var conf embed.FS
 
@@ -65,7 +65,7 @@ func ReleaseFile(fsEmbed embed.FS, targetPath string) {
 		}
 	}(file)
 	//写入
-	err = ioutil.WriteFile(targetPath, content, fs.FileMode.Perm(0666))
+	err = os.WriteFile(targetPath, content, fs.FileMode.Perm(0666))
 	if err != nil {
 		log.Fatal(err)
 	}
